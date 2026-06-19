@@ -301,6 +301,18 @@ footer{position:relative;z-index:2;background:var(--black);border-top:1px solid 
 @keyframes kinerty-shine{0%{left:-60%}100%{left:140%}}
 .kinerty-link:hover{border-color:var(--gold);background:rgba(212,184,74,.07);transform:translateY(-2px)}
 .kinerty-logo{color:var(--gold)}
+  /* Mobile fallback: show gallery after delay */
+  @media (max-width: 768px) {
+    .gallery-item { opacity: 0; animation: gallery-show 0.5s ease forwards; }
+    .gallery-item:nth-child(1) { animation-delay: 0.1s; }
+    .gallery-item:nth-child(2) { animation-delay: 0.2s; }
+    .gallery-item:nth-child(3) { animation-delay: 0.3s; }
+    .gallery-item:nth-child(4) { animation-delay: 0.4s; }
+    .gallery-item:nth-child(5) { animation-delay: 0.5s; }
+    .gallery-item:nth-child(6) { animation-delay: 0.6s; }
+    .gallery-item:nth-child(7) { animation-delay: 0.7s; }
+    @keyframes gallery-show { to { opacity: 1; transform: scale(1) translateY(0) rotate(0deg); } }
+  }
 </style>
 </head>
 <body>
@@ -460,13 +472,13 @@ footer{position:relative;z-index:2;background:var(--black);border-top:1px solid 
     <p>Beautiful moments with Dr. Paul</p>
   </div>
   <div class="gallery-grid" id="galleryGrid">
-    <div class="gallery-item" onclick="openLightbox(0)"><img src="images/gallery-1.jpg" alt="Dr. Paul et son épouse — portrait studio" loading="lazy"><div class="gallery-overlay">🔍</div></div>
-    <div class="gallery-item" onclick="openLightbox(1)"><img src="images/gallery-2.jpg" alt="Dr. Paul en famille" loading="lazy"><div class="gallery-overlay">🔍</div></div>
-    <div class="gallery-item" onclick="openLightbox(2)"><img src="images/gallery-3.jpg" alt="Dr. Paul et ses filles" loading="lazy"><div class="gallery-overlay">🔍</div></div>
-    <div class="gallery-item" onclick="openLightbox(3)"><img src="images/gallery-4.jpg" alt="Dr. Paul et son petit-fils" loading="lazy"><div class="gallery-overlay">🔍</div></div>
-    <div class="gallery-item" onclick="openLightbox(4)"><img src="images/gallery-5.jpg" alt="Dr. Paul et son épouse en extérieur" loading="lazy"><div class="gallery-overlay">🔍</div></div>
-    <div class="gallery-item" onclick="openLightbox(5)"><img src="images/gallery-6.jpg" alt="Dr. Paul et un ami" loading="lazy"><div class="gallery-overlay">🔍</div></div>
-    <div class="gallery-item" onclick="openLightbox(6)"><img src="images/gallery-7.jpg" alt="Dr. Paul entouré de sa grande famille" loading="lazy"><div class="gallery-overlay">🔍</div></div>
+    <div class="gallery-item" onclick="openLightbox(0)"><img src="images/gallery-1.jpg" alt="Dr. Paul et son épouse — portrait studio"><div class="gallery-overlay">🔍</div></div>
+    <div class="gallery-item" onclick="openLightbox(1)"><img src="images/gallery-2.jpg" alt="Dr. Paul en famille"><div class="gallery-overlay">🔍</div></div>
+    <div class="gallery-item" onclick="openLightbox(2)"><img src="images/gallery-3.jpg" alt="Dr. Paul et ses filles"><div class="gallery-overlay">🔍</div></div>
+    <div class="gallery-item" onclick="openLightbox(3)"><img src="images/gallery-4.jpg" alt="Dr. Paul et son petit-fils"><div class="gallery-overlay">🔍</div></div>
+    <div class="gallery-item" onclick="openLightbox(4)"><img src="images/gallery-5.jpg" alt="Dr. Paul et son épouse en extérieur"><div class="gallery-overlay">🔍</div></div>
+    <div class="gallery-item" onclick="openLightbox(5)"><img src="images/gallery-6.jpg" alt="Dr. Paul et un ami"><div class="gallery-overlay">🔍</div></div>
+    <div class="gallery-item" onclick="openLightbox(6)"><img src="images/gallery-7.jpg" alt="Dr. Paul entouré de sa grande famille"><div class="gallery-overlay">🔍</div></div>
   </div>
 </section>
 
@@ -618,7 +630,7 @@ function launchBurst(){
 
 /* Scroll reveal */
 (function(){
-  var io=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target);}});},{threshold:0,rootMargin:'0px 0px -50px 0px'});
+  var io=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target);}});},{threshold:0,rootMargin:"0px 0px -20px 0px"});
   document.querySelectorAll('.info-card,.tl-card,.tl-dot,.map-countdown-box,.reveal,.reveal-zoom').forEach(function(el){io.observe(el);});
 
   var gallery=document.querySelectorAll('.gallery-item');
@@ -630,7 +642,7 @@ function launchBurst(){
         gio.unobserve(e.target);
       }
     });
-  },{threshold:0,rootMargin:'0px 0px -30px 0px'});
+  },{threshold:0,rootMargin:"0px 0px -10px 0px"});
   gallery.forEach(function(el){gio.observe(el);});
 })();
 
