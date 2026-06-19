@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Test Images</title>
+<style>
+body { background: #0a1640; color: white; font-family: sans-serif; padding: 20px; }
+img { width: 100%; max-width: 300px; display: block; margin: 10px 0; border: 2px solid gold; }
+.status { padding: 8px; margin: 5px 0; border-radius: 6px; font-size: 14px; }
+.ok { background: green; }
+.err { background: red; }
+</style>
+</head>
+<body>
+<h2>🔍 Test de chargement des images</h2>
+<div id="results"></div>
+<script>
+var images = [
+  'images/gallery-1.jpg',
+  'images/gallery-2.jpg', 
+  'images/gallery-3.jpg',
+  'images/gallery-4.jpg',
+  'images/gallery-5.jpg',
+  'images/gallery-6.jpg',
+  'images/gallery-7.jpg',
+  'images/hero-dr-paul.jpg'
+];
+var div = document.getElementById('results');
+images.forEach(function(src) {
+  var row = document.createElement('div');
+  var img = document.createElement('img');
+  var status = document.createElement('div');
+  status.className = 'status';
+  status.textContent = '⏳ ' + src;
+  img.onload = function() {
+    status.className = 'status ok';
+    status.textContent = '✅ ' + src + ' (' + img.naturalWidth + 'x' + img.naturalHeight + ')';
+  };
+  img.onerror = function() {
+    status.className = 'status err';
+    status.textContent = '❌ ERREUR: ' + src;
+  };
+  img.src = src;
+  row.appendChild(status);
+  row.appendChild(img);
+  div.appendChild(row);
+});
+</script>
+</body>
+</html>
