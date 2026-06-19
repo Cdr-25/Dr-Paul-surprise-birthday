@@ -839,7 +839,7 @@ function checkMapVisibility(){
   var sec=document.getElementById('map-section'),cd=document.getElementById('map-countdown');
   if(!sec)return;
   var now=new Date();
-  var show=TEST_MAP||(now>=MAP_DATE&&now<=new Date('2026-07-03T23:59:59'));
+  var show=TEST_MAP||(now>=MAP_DATE&&now<=new Date('2026-06-28T23:59:59'));
   if(show){sec.style.display='block';if(cd)cd.style.display='none';setTimeout(function(){initMap();},150);}
   else{sec.style.display='none';if(cd)cd.style.display='block';}
 }
