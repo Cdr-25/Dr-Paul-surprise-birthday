@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Test</title>
+<style>
+body{background:#0a1640;color:white;font-family:sans-serif;padding:20px;font-size:18px}
+.box{padding:12px;margin:8px 0;border-radius:8px;word-break:break-all}
+.ok{background:green}.err{background:red}.wait{background:grey}
+</style>
+</head>
+<body>
+<h2>Diagnostic</h2>
+<div id="url" class="box wait"></div>
+<div id="r1" class="box wait">Test 1: images/gallery-1.jpg</div>
+<div id="r2" class="box wait">Test 2: /images/gallery-1.jpg</div>
+<div id="r3" class="box wait">Test 3: ./images/gallery-1.jpg</div>
+<script>
+document.getElementById('url').textContent = '📍 URL actuelle: ' + window.location.href;
+
+function testImg(id, src) {
+  var el = document.getElementById(id);
+  var img = new Image();
+  img.onload = function(){
+    el.className='box ok';
+    el.textContent = '✅ MARCHE: ' + src;
+  };
+  img.onerror = function(){
+    el.className='box err';
+    el.textContent = '❌ ECHOUE: ' + src;
+  };
+  img.src = src + '?t=' + Date.now();
+}
+
+testImg('r1', 'images/gallery-1.jpg');
+testImg('r2', '/images/gallery-1.jpg');
+testImg('r3', './images/gallery-1.jpg');
+</script>
+</body>
+</html>
