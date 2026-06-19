@@ -7,20 +7,20 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --rose:       #c9a85c;
-  --rose-deep:  #9a6828;
-  --rose-pale:  #f4e8c8;
-  --gold:       #c9a85c;
-  --gold-lt:    #f2ddb5;
-  --cream:      #fbf6ec;
+  --rose:       #c9a44e;
+  --rose-deep:  #8a6a23;
+  --rose-pale:  #f0e6c8;
+  --gold:       #c9a44e;
+  --gold-lt:    #f3e9d2;
+  --cream:      #f7f9fb;
   --white:      #ffffff;
-  --ink:        #241804;
-  --muted:      #7a6037;
+  --ink:        #0d1b26;
+  --muted:      #5b6b78;
   --green:      #4caf7d;
   --green-pale: #e8f5ee;
   --red:        #e57373;
   --red-pale:   #fdecea;
-  --border:     rgba(154,104,40,.22);
+  --border:     rgba(201,164,78,.22);
 }
 *,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
 html { overflow-x:hidden; }
@@ -35,7 +35,7 @@ body {
 .login-screen {
   min-height:100vh;
   display:flex;align-items:center;justify-content:center;
-  background:linear-gradient(160deg,#fffaf0 0%,#f4e8c8 50%,#fbf6ec 100%);
+  background:linear-gradient(160deg,#fbfdff 0%,#f0e6c8 50%,#f7f9fb 100%);
   padding:20px;
 }
 .login-box {
@@ -90,7 +90,7 @@ body {
   box-shadow:0 8px 24px rgba(201,94,126,.3);
   margin-top:8px;
 }
-.btn-login:hover { transform:translateY(-2px);box-shadow:0 12px 32px rgba(154,104,40,.35); }
+.btn-login:hover { transform:translateY(-2px);box-shadow:0 12px 32px rgba(201,164,78,.35); }
 .login-error {
   color:var(--red);font-size:.82rem;
   margin-top:10px;display:none;
@@ -389,7 +389,7 @@ tbody tr:hover { background:rgba(252,232,239,.3); }
       </div>
 
       <!-- TOTAL INVITES -->
-      <div class="stat-card" style="grid-column:1/-1;background:linear-gradient(135deg,#fff0f5,#f4e8c8);border:2px solid var(--rose);">
+      <div class="stat-card" style="grid-column:1/-1;background:linear-gradient(135deg,#fff0f5,#f0e6c8);border:2px solid var(--rose);">
         <div class="stat-icon">&#x1F385;</div>
         <div class="stat-label" style="color:var(--rose-deep);">Total people expected</div>
         <div class="stat-value" id="statTotalGuests" style="font-size:3rem;color:var(--rose-deep);">&#x2014;</div>
@@ -448,9 +448,10 @@ tbody tr:hover { background:rgba(252,232,239,.3); }
 
 <script>
 /* ═══ CONFIG ═══ */
-const SUPABASE_URL = 'COLLEZ_ICI_VOTRE_SUPABASE_URL';
-const SUPABASE_KEY = 'COLLEZ_ICI_VOTRE_SUPABASE_ANON_KEY';
+const SUPABASE_URL = 'https://ngalqgruditdnrihaudl.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5nYWxxZ3J1ZGl0ZG5yaWhhdWRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE4NzA2ODcsImV4cCI6MjA5NzQ0NjY4N30.-2zDEZlHzHeK31d61xqQcUrv7GbQdGNYa2xFFWcV9Mo';
 const ADMIN_PASS   = 'paul50';  // ← Change this password!
+const supabaseReady = SUPABASE_URL && !SUPABASE_URL.includes('COLLEZ') && SUPABASE_URL.startsWith('https://');
 
 let allData = [];
 
@@ -515,6 +516,13 @@ async function loadData(){
   const btn = document.getElementById('btnRefresh');
   btn.classList.add('spinning');
 
+  if(!supabaseReady){
+    btn.classList.remove('spinning');
+    toast('⚠️ Supabase not configured yet — add your URL & KEY', 'error');
+    renderAll([]);
+    return;
+  }
+
   try {
     const res = await fetch(
       SUPABASE_URL + '/rest/v1/rsvp?select=*&order=created_at.desc',
@@ -531,7 +539,7 @@ async function loadData(){
     toast('Data refreshed ✓', 'success');
   } catch(e){
     console.error(e);
-    toast('Loading error', 'error');
+    toast('Loading error — check your Supabase config', 'error');
   } finally {
     btn.classList.remove('spinning');
   }
