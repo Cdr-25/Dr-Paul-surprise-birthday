@@ -4,12 +4,9 @@
     {
       "source": "/images/(.*)",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" },
+        { "key": "Cache-Control", "value": "public, max-age=86400" },
         { "key": "Content-Type", "value": "image/jpeg" }
       ]
     }
-  ],
-  "rewrites": [
-    { "source": "/images/(.*)", "destination": "/images/$1" }
   ]
 }
