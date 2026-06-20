@@ -493,7 +493,7 @@ window.addEventListener('DOMContentLoaded', async () => {
 
   // Si Supabase pas encore configuré → mode démo
   if(!supabaseReady){
-    populateForm({ prenom:'Guest', nom:'', presence:'oui', accompagne:'seul', nb_adultes:1, nb_enfants:0, modifie:false });
+    populateForm({ prenom:'Guest', nom:'', presence:'oui', accompagne:'seul', nb_adultes:0, nb_enfants:0, modifie:false });
     showCard();
     return;
   }
@@ -535,7 +535,7 @@ function populateForm(d){
   // Infos actuelles
   document.getElementById('ciStatut').textContent  = d.presence === 'oui' ? '✓ Attendance confirmed' : '✗ Not attending';
   document.getElementById('ciGroupe').textContent  = d.accompagne === 'oui' ? 'With guests' : 'Alone';
-  document.getElementById('ciAdultes').textContent = d.nb_adultes || 1;
+  document.getElementById('ciAdultes').textContent = d.nb_adultes || 0;
   document.getElementById('ciEnfants').textContent = d.nb_enfants || 0;
 
   // Pré-remplir formulaire
@@ -544,7 +544,7 @@ function populateForm(d){
 
   if(d.accompagne === 'oui'){
     document.getElementById('m-acc').checked = true;
-    document.getElementById('m-adultes').value = d.nb_adultes || 1;
+    document.getElementById('m-adultes').value = d.nb_adultes || 0;
     document.getElementById('m-enfants').value = d.nb_enfants || 0;
   } else {
     document.getElementById('m-seul').checked = true;
@@ -583,7 +583,7 @@ async function saveModif(){
 
   const presence   = document.querySelector('input[name=presence]:checked')?.value || 'non';
   const accompagne = document.querySelector('input[name=accompagne]:checked')?.value || 'seul';
-  const nbAdultes  = accompagne === 'oui' ? parseInt(document.getElementById('m-adultes').value || '1') : 1;
+  const nbAdultes  = accompagne === 'oui' ? parseInt(document.getElementById('m-adultes').value || '0') : 0;
   const nbEnfants  = accompagne === 'oui' ? parseInt(document.getElementById('m-enfants').value  || '0') : 0;
 
   const updates = { presence, accompagne, nb_adultes: nbAdultes, nb_enfants: nbEnfants, modifie: true };
