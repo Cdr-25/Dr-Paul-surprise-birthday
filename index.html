@@ -372,6 +372,15 @@ footer{position:relative;z-index:2;background:var(--black);border-top:1px solid 
   </a>
 </section>
 
+<div class="ticker-wrap">
+  <div class="ticker-track">
+    <span>✦ JUNE 28TH, 2026 · 3:00 PM</span><span>👑 THE GOLDEN FIFTY</span><span>✦ DR. PAUL DONTSOP</span><span>🥂 A SURPRISE TO REMEMBER</span>
+    <span>✦ JUNE 28TH, 2026 · 3:00 PM</span><span>👑 THE GOLDEN FIFTY</span><span>✦ DR. PAUL DONTSOP</span><span>🥂 A SURPRISE TO REMEMBER</span>
+  </div>
+</div>
+
+
+
 <section class="section-timeline" id="parcours">
   <div class="s-header reveal">
     <h2>50 Years of Excellence</h2>
@@ -542,6 +551,13 @@ footer{position:relative;z-index:2;background:var(--black);border-top:1px solid 
   </div>
 </section>
 
+
+<div class="ticker-wrap ticker-wrap-bottom">
+  <div class="ticker-track">
+    <span>✦ JUNE 28TH, 2026 · 3:00 PM</span><span>👑 THE GOLDEN FIFTY</span><span>✦ DR. PAUL DONTSOP</span><span>🥂 A SURPRISE TO REMEMBER</span>
+    <span>✦ JUNE 28TH, 2026 · 3:00 PM</span><span>👑 THE GOLDEN FIFTY</span><span>✦ DR. PAUL DONTSOP</span><span>🥂 A SURPRISE TO REMEMBER</span>
+  </div>
+</div>
 <footer class="reveal">
   <div class="ft-gems">✦ 🥂 ✦</div>
   <p class="ft-quote">« Fifty years of wisdom, grace and excellence.<br>Thank you for sharing this precious moment with us. »</p>
@@ -576,6 +592,11 @@ window.addEventListener('pageshow',function(e){
     var sm=document.getElementById('successMsg');if(sm)sm.style.display='none';
     var form=document.getElementById('rsvpForm');if(form)form.style.display='';
     var hero=document.querySelector('.hero');if(hero)hero.style.display='';
+    document.querySelector('.ticker-wrap').style.display='';
+    var restoreSections=['.section-timeline','.section-gallery','.section-gps'];
+    restoreSections.forEach(function(sel){var el=document.querySelector(sel);if(el)el.style.display='';});
+    document.querySelectorAll('.ticker-wrap-bottom').forEach(function(el){el.style.display='';});
+    var ft=document.querySelector('footer');if(ft)ft.style.display='';
     var sh=document.querySelector('.section-rsvp .s-header');if(sh)sh.style.display='';
     var sr=document.querySelector('.section-rsvp');
     if(sr){sr.style.background='';sr.style.minHeight='';sr.style.display='';sr.style.alignItems='';sr.style.justifyContent='';}
@@ -735,7 +756,7 @@ document.getElementById('rsvpForm').addEventListener('submit',async function(e){
   var presence=(document.querySelector('input[name=presence]:checked')||{}).value||'oui';
   var ac=(document.querySelector('input[name=accompagne]:checked')||{}).value||'seul';
   var absent=presence==='non';
-  var nbA=ac==='oui'?parseInt(document.getElementById('nb-adultes').value||1):0;
+  var nbA=ac==='oui'?parseInt(document.getElementById('nb-adultes').value||1):1;
   var nbE=ac==='oui'?parseInt(document.getElementById('nb-enfants').value||0):0;
   var token=createToken();
   var prenom=absent?'':document.getElementById('prenom').value.trim();
@@ -747,9 +768,15 @@ document.getElementById('rsvpForm').addEventListener('submit',async function(e){
     document.getElementById('rsvpForm').style.display='none';
     var sh=document.querySelector('.section-rsvp .s-header');if(sh)sh.style.display='none';
     var sm=document.getElementById('successMsg');sm.style.display='block';
+    /* Masquer tout sauf la section RSVP */
     document.querySelector('.hero').style.display='none';
+    document.querySelector('.ticker-wrap').style.display='none';
+    var hideSections=['.section-timeline','.section-gallery','.section-gps'];
+    hideSections.forEach(function(sel){var el=document.querySelector(sel);if(el)el.style.display='none';});
+    document.querySelectorAll('.ticker-wrap-bottom').forEach(function(el){el.style.display='none';});
+    document.querySelector('footer').style.display='none';
     document.querySelector('.section-rsvp').style.background='var(--black)';
-    document.querySelector('.section-rsvp').style.minHeight='calc(100vh - 120px)';
+    document.querySelector('.section-rsvp').style.minHeight='100vh';
     document.querySelector('.section-rsvp').style.display='flex';
     document.querySelector('.section-rsvp').style.alignItems='center';
     document.querySelector('.section-rsvp').style.justifyContent='center';
