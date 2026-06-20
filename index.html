@@ -735,7 +735,7 @@ document.getElementById('rsvpForm').addEventListener('submit',async function(e){
   var presence=(document.querySelector('input[name=presence]:checked')||{}).value||'oui';
   var ac=(document.querySelector('input[name=accompagne]:checked')||{}).value||'seul';
   var absent=presence==='non';
-  var nbA=ac==='oui'?parseInt(document.getElementById('nb-adultes').value||1):1;
+  var nbA=ac==='oui'?parseInt(document.getElementById('nb-adultes').value||1):0;
   var nbE=ac==='oui'?parseInt(document.getElementById('nb-enfants').value||0):0;
   var token=createToken();
   var prenom=absent?'':document.getElementById('prenom').value.trim();
