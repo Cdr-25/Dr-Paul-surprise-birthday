@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dr. Paul · The Golden Fifty 👑</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --gold:#d4b84a;
+  --gold2:#a07c1e;
+  --gold3:#fdf0c0;
+  --bg:#060d22;
+}
+html,body{
+  width:100%;height:100%;
+  background:var(--bg);
+  overflow:hidden;
+  font-family:'Montserrat',sans-serif;
+}
+
+/* ── PARTICLES ── */
+#canvas{position:fixed;inset:0;z-index:0;pointer-events:none}
+
+/* ── RADIAL GLOW BG ── */
+.bg-glow{
+  position:fixed;inset:0;z-index:0;
+  background:radial-gradient(ellipse 80% 60% at 50% 50%, rgba(26,46,112,.6) 0%, transparent 70%);
+  pointer-events:none;
+}
+
+/* ── SLIDE BASE ── */
+.slide{
+  position:fixed;inset:0;z-index:2;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:60px 80px;
+  opacity:0;
+  transition:opacity 1.2s ease;
+  pointer-events:none;
+  text-align:center;
+}
+.slide.active{opacity:1;pointer-events:auto}
+
+/* ── INTRO SLIDE ── */
+#slideIntro{}
+.intro-crown{
+  font-size:clamp(4rem,10vw,8rem);
+  animation:float 3s ease-in-out infinite;
+  margin-bottom:24px;
+}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-18px) rotate(5deg)}}
+
+.intro-eyebrow{
+  font-size:clamp(.65rem,1.5vw,1rem);
+  letter-spacing:.35em;text-transform:uppercase;
+  color:rgba(212,184,74,.6);
+  margin-bottom:20px;
+}
+.intro-title{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(2.5rem,7vw,6rem);
+  font-weight:900;line-height:1.1;
+  background:linear-gradient(140deg,var(--gold2) 0%,var(--gold) 40%,var(--gold3) 70%,var(--gold) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin-bottom:16px;
+}
+.intro-divider{
+  display:flex;align-items:center;gap:16px;
+  margin:24px auto;width:min(500px,80vw);
+}
+.intro-divider-line{flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(212,184,74,.5),transparent)}
+.intro-divider-star{color:var(--gold);font-size:1.2rem}
+.intro-message{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(1.4rem,3.5vw,2.6rem);
+  font-style:italic;font-weight:700;
+  color:rgba(255,255,255,.9);
+  line-height:1.4;
+  max-width:800px;
+}
+.intro-message em{
+  font-style:normal;
+  background:linear-gradient(130deg,var(--gold),var(--gold3));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+
+/* ── MSG SLIDE ── */
+#slideMsg{}
+.msg-from{
+  font-size:clamp(.7rem,1.8vw,1.1rem);
+  letter-spacing:.3em;text-transform:uppercase;
+  color:rgba(212,184,74,.55);
+  margin-bottom:10px;
+}
+.msg-name{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(1.8rem,5vw,4rem);
+  font-weight:900;
+  background:linear-gradient(130deg,var(--gold2),var(--gold),var(--gold3));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin-bottom:32px;
+  line-height:1.1;
+}
+.msg-ornament{
+  display:flex;align-items:center;gap:16px;
+  width:min(600px,80vw);margin:0 auto 32px;
+}
+.msg-ornament-line{flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(212,184,74,.4),transparent)}
+.msg-ornament-icon{color:var(--gold);font-size:1.4rem}
+.msg-quote-icon{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(4rem,8vw,7rem);
+  color:rgba(212,184,74,.15);
+  line-height:.8;
+  margin-bottom:8px;
+}
+.msg-body{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(1.6rem,4.5vw,3.8rem);
+  font-weight:700;font-style:italic;
+  line-height:1.4;
+  max-width:900px;
+  background:linear-gradient(160deg,#fff 0%,rgba(255,255,255,.9) 50%,var(--gold3) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+
+/* ── PROGRESS BAR ── */
+.progress-bar{
+  position:fixed;bottom:0;left:0;right:0;z-index:10;
+  height:4px;
+  background:rgba(212,184,74,.15);
+}
+.progress-fill{
+  height:100%;width:0%;
+  background:linear-gradient(90deg,var(--gold2),var(--gold),var(--gold3));
+  transition:width linear;
+}
+
+/* ── COUNTER badge ── */
+.msg-counter{
+  position:fixed;top:28px;right:36px;z-index:10;
+  font-size:.72rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(212,184,74,.5);
+}
+
+/* ── TICKER ── */
+.ticker{
+  position:fixed;top:0;left:0;right:0;z-index:10;
+  height:36px;overflow:hidden;
+  background:linear-gradient(90deg,var(--gold2),var(--gold),var(--gold2));
+  display:flex;align-items:center;
+}
+.ticker-track{
+  display:flex;width:max-content;
+  animation:ticker 35s linear infinite;
+}
+.ticker-track span{
+  display:inline-flex;align-items:center;gap:10px;
+  color:var(--bg);font-weight:800;font-size:.65rem;
+  letter-spacing:.22em;text-transform:uppercase;
+  padding:0 32px;white-space:nowrap;
+}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ── LOADER ── */
+.loader{
+  position:fixed;inset:0;z-index:100;
+  background:var(--bg);
+  display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;
+  transition:opacity 1s ease;
+}
+.loader.hide{opacity:0;pointer-events:none}
+.loader-crown{font-size:5rem;animation:float 2s ease-in-out infinite}
+.loader-text{
+  font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;
+  background:linear-gradient(130deg,var(--gold2),var(--gold),var(--gold3));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.loader-sub{font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;color:rgba(212,184,74,.35)}
+</style>
+</head>
+<body>
+
+<canvas id="canvas"></canvas>
+<div class="bg-glow"></div>
+
+<!-- LOADER -->
+<div class="loader" id="loader">
+  <div class="loader-crown">👑</div>
+  <div class="loader-text">The Golden Fifty</div>
+  <div class="loader-sub">Loading…</div>
+</div>
+
+<!-- TICKER TOP -->
+<div class="ticker">
+  <div class="ticker-track">
+    <span>✦ JUNE 28TH, 2026 · 3:00 PM</span><span>👑 THE GOLDEN FIFTY</span><span>✦ DR. PAUL DONTSOP</span><span>🥂 50 YEARS OF EXCELLENCE</span><span>🎉 AN UNFORGETTABLE SURPRISE</span>
+    <span>✦ JUNE 28TH, 2026 · 3:00 PM</span><span>👑 THE GOLDEN FIFTY</span><span>✦ DR. PAUL DONTSOP</span><span>🥂 50 YEARS OF EXCELLENCE</span><span>🎉 AN UNFORGETTABLE SURPRISE</span>
+  </div>
+</div>
+
+<!-- COUNTER -->
+<div class="msg-counter" id="msgCounter"></div>
+
+<!-- INTRO SLIDE -->
+<div class="slide" id="slideIntro">
+  <div class="intro-crown">👑</div>
+  <div class="intro-eyebrow">✦ The Golden Fifty · June 28th, 2026 ✦</div>
+  <div class="intro-title">Dr. Paul Dontsop</div>
+  <div class="intro-divider">
+    <div class="intro-divider-line"></div>
+    <div class="intro-divider-star">✦</div>
+    <div class="intro-divider-line"></div>
+  </div>
+  <div class="intro-message">
+    Your guests have left you<br><em>heartfelt messages</em> 💛
+  </div>
+</div>
+
+<!-- MESSAGE SLIDE -->
+<div class="slide" id="slideMsg">
+  <div class="msg-from">Message from</div>
+  <div class="msg-name" id="msgName">—</div>
+  <div class="msg-ornament">
+    <div class="msg-ornament-line"></div>
+    <div class="msg-ornament-icon">💛</div>
+    <div class="msg-ornament-line"></div>
+  </div>
+  <div class="msg-quote-icon">"</div>
+  <div class="msg-body" id="msgBody">—</div>
+</div>
+
+<!-- PROGRESS BAR -->
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+<script>
+// ── CONFIG ──
+var SUPABASE_URL     = 'https://ngalqgruditdnrihaudl.supabase.co';
+var SUPABASE_KEY     = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5nYWxxZ3J1ZGl0ZG5yaWhhdWRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE4NzA2ODcsImV4cCI6MjA5NzQ0NjY4N30.-2zDEZlHzHeK31d61xqQcUrv7GbQdGNYa2xFFWcV9Mo';
+var INTRO_DURATION   = 5000;   // intro visible 5 sec
+var REFRESH_INTERVAL = 30000;  // re-fetch toutes les 30 sec
+var MSG_PER_WORD     = 500;    // 0.5s par mot
+var MSG_MIN          = 6000;   // min 6s
+var MSG_MAX          = 22000;  // max 22s
+
+// ── STATE ──
+var messages  = [];
+var msgIdx    = 0;
+var timer     = null;
+var phase     = 'intro'; // 'intro' | 'messages'
+
+// ── PARTICLES ──
+(function(){
+  var cv=document.getElementById('canvas'),ctx=cv.getContext('2d'),P=[];
+  var cols=['#d4b84a','#fdf0c0','#a07c1e','rgba(255,255,255,.7)'];
+  function resize(){cv.width=innerWidth;cv.height=innerHeight;}
+  resize();window.addEventListener('resize',resize);
+  for(var i=0;i<70;i++) P.push({
+    x:Math.random()*innerWidth,y:Math.random()*innerHeight,
+    r:Math.random()*2.5+.4,vx:(Math.random()-.5)*.2,vy:(Math.random()-.5)*.2,
+    col:cols[Math.floor(Math.random()*cols.length)],
+    a:Math.random()*.4+.05,ph:Math.random()*Math.PI*2
+  });
+  (function draw(){
+    ctx.clearRect(0,0,cv.width,cv.height);
+    P.forEach(function(p){
+      p.x+=p.vx;p.y+=p.vy;p.ph+=.012;
+      if(p.x<0)p.x=cv.width;if(p.x>cv.width)p.x=0;
+      if(p.y<0)p.y=cv.height;if(p.y>cv.height)p.y=0;
+      ctx.globalAlpha=p.a*(0.5+0.5*Math.sin(p.ph));
+      ctx.fillStyle=p.col;
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  })();
+})();
+
+// ── HELPERS ──
+function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function getDur(text){
+  var words=text?text.trim().split(/\s+/).length:1;
+  return Math.min(MSG_MAX,Math.max(MSG_MIN,words*MSG_PER_WORD));
+}
+
+function setProgress(dur){
+  var bar=document.getElementById('progressFill');
+  bar.style.transition='none';bar.style.width='0%';
+  requestAnimationFrame(function(){requestAnimationFrame(function(){
+    bar.style.transition='width '+dur+'ms linear';
+    bar.style.width='100%';
+  });});
+}
+
+function showSlide(id){
+  document.querySelectorAll('.slide').forEach(function(s){s.classList.remove('active');});
+  document.getElementById(id).classList.add('active');
+}
+
+// ── MESSAGES ──
+function showMessage(idx){
+  if(messages.length===0) return;
+  msgIdx=((idx%messages.length)+messages.length)%messages.length;
+  var m=messages[msgIdx];
+
+  document.getElementById('msgName').textContent=m.author;
+  document.getElementById('msgBody').innerHTML=esc(m.text);
+  document.getElementById('msgCounter').textContent=(msgIdx+1)+' / '+messages.length;
+
+  // Fade out then in
+  var slide=document.getElementById('slideMsg');
+  slide.style.opacity='0';
+  setTimeout(function(){
+    showSlide('slideMsg');
+    requestAnimationFrame(function(){requestAnimationFrame(function(){
+      slide.style.opacity='1';
+    });});
+  }, phase==='intro'?0:600);
+
+  phase='messages';
+  var dur=getDur(m.text);
+  setProgress(dur);
+  if(timer) clearTimeout(timer);
+  timer=setTimeout(function(){ showMessage(msgIdx+1); }, dur);
+}
+
+function startShow(){
+  showSlide('slideIntro');
+  if(messages.length===0){
+    document.querySelector('.intro-message').innerHTML=
+      'No messages yet…<br><em>Messages will appear soon 💛</em>';
+    return;
+  }
+  setTimeout(function(){ showMessage(0); }, INTRO_DURATION);
+}
+
+// ── FETCH ──
+function fetchData(){
+  fetch(SUPABASE_URL+'/rest/v1/rsvp?select=prenom,nom,message&order=created_at.asc',{
+    headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}
+  })
+  .then(function(r){return r.json();})
+  .then(function(data){
+    var msgs=data.filter(function(r){return r.message&&r.message.trim()!=='';})
+      .map(function(r){return{
+        text:r.message.trim(),
+        author:r.prenom+(r.nom?' '+r.nom:'')
+      };});
+
+    document.getElementById('loader').classList.add('hide');
+
+    if(JSON.stringify(msgs)!==JSON.stringify(messages)){
+      messages=msgs;
+      if(phase==='intro'||messages.length===0){
+        startShow();
+      }
+      // If already showing messages, new ones will be picked up naturally in rotation
+    } else if(phase==='intro'){
+      startShow();
+    }
+  })
+  .catch(function(){
+    document.getElementById('loader').classList.add('hide');
+    startShow();
+  });
+}
+
+// ── KEYBOARD ──
+document.addEventListener('keydown',function(e){
+  if(e.key==='ArrowRight'&&messages.length>0){if(timer)clearTimeout(timer);showMessage(msgIdx+1);}
+  if(e.key==='ArrowLeft'&&messages.length>0){if(timer)clearTimeout(timer);showMessage(msgIdx-1);}
+  if(e.key==='f'||e.key==='F') document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen();
+  if(e.key===' '){// space = restart intro
+    phase='intro';if(timer)clearTimeout(timer);startShow();
+  }
+});
+
+// ── INIT ──
+fetchData();
+setInterval(fetchData, REFRESH_INTERVAL);
+</script>
+</body>
+</html>
